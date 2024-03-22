@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebAppBanco.Data;
 
@@ -11,9 +12,11 @@ using WebAppBanco.Data;
 namespace WebAppBanco4.Migrations
 {
     [DbContext(typeof(WebAppBancoContext))]
-    partial class WebAppBancoContextModelSnapshot : ModelSnapshot
+    [Migration("20240322111410_AddTarjetaIdToCompras")]
+    partial class AddTarjetaIdToCompras
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
