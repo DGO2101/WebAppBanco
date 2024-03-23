@@ -60,23 +60,44 @@
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
             }
-        public IActionResult AgregarCompra()
+
+        // GET: Tarjetas/AgregarCompra/5
+        public IActionResult AgregarCompra(int id)
         {
+            ViewBag.TarjetaId = id;
             return View();
         }
 
-        // POST: Compras/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Tarjetas/AgregarCompra/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AgregarCompra([Bind("TarjetaId,FechaCompra,Descripcion,Monto")] Compras compras)
+        public async Task<IActionResult> AgregarCompra(int id, [Bind("FechaCompra,Descripcion,Monto")] Compras compra)
         {
-                _context.Add(compras);
+                compra.TarjetaId = id;
+                _context.Add(compra);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             
         }
+
+        // GET: Tarjetas/VerCompras/5
+            public async Task<IActionResult> ListaCompras()
+        {
+            //compra.TarjetaId = id;
+            //    var tarjeta = await _context.Tarjetas
+            //        .Include(t => t.Compras)
+            //        .FirstOrDefaultAsync(t => t.Id == id);
+
+            //    if (tarjeta == null)
+            //    {
+            //        return NotFound();
+            //    }
+
+            //    return View(tarjeta);
+            return View(await _context.Compras.ToListAsync());
+        }
+
+
 
 
 
