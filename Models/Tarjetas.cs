@@ -10,6 +10,7 @@ namespace WebAppBanco.Models
         public string Apellidos { get; set; }
         public string Numero { get; set; }
 
+
         public virtual ICollection<Pagos> Pagos { get; set; }
         public virtual ICollection<Compras  > Compras { get; set; }
     }

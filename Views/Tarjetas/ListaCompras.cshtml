@@ -1,35 +1,77 @@
-﻿@model List<WebAppBanco.Models.Compras>
+﻿@model Tuple<WebAppBanco.Models.Tarjetas, IEnumerable<WebAppBanco.Models.Compras>, decimal>
 
-<h1>Compras de la Tarjeta</h1>
+@{
+    ViewData["Title"] = "Detalles de Tarjeta";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 
-@if (Model.Count > 0)
-{
-    <table class="table">
-        <thead>
+    // Calcular el monto total de las compras
+    decimal totalCompras = Model.Item2.Sum(c => c.Monto);
+
+    // Definir el límite de crédito y el porcentaje de interés bonificable
+    decimal limiteCredito = 10000; // Ejemplo de límite de crédito
+    decimal porcentajeInteresBonificable = 0.05m; // Ejemplo de porcentaje de interés bonificable
+
+    // Calcular el saldo disponible y el interés bonificable
+    decimal saldoDisponible = limiteCredito - totalCompras;
+    decimal interesBonificable = totalCompras * porcentajeInteresBonificable;
+}
+
+<h1>Detalles de Tarjeta</h1>
+
+<div class="row">
+    <div class="col-sm-6">
+        <h4>Información de Tarjeta</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-10">Nombres</dt>
+            <dd class="col-sm-10">@Model.Item1.Nombres</dd>
+            <dt class="col-sm-10">Apellidos</dt>
+            <dd class="col-sm-10">@Model.Item1.Apellidos</dd>
+            <dt class="col-sm-10">Número de Tarjeta</dt>
+            <dd class="col-sm-10">@Model.Item1.Numero</dd>
+        </dl>
+    </div>
+    <div class="col-sm-6">
+        <h4>Datos Adicionales</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-10">Monto Total de Compras</dt>
+            <dd class="col-sm-10">@totalCompras</dd>
+            <dt class="col-sm-10">Límite de Crédito</dt>
+            <dd class="col-sm-10">@limiteCredito</dd>
+            <dt class="col-sm-10">Saldo Disponible</dt>
+            <dd class="col-sm-10">@saldoDisponible</dd>
+            <dt class="col-sm-10">Interés Bonificable</dt>
+            <dd class="col-sm-10">@interesBonificable</dd>
+            <dt class="col-sm-10">Saldo mes anterior</dt>
+            <dd class="col-sm-10">@Model.Item3</dd>
+        </dl>
+    </div>
+</div>
+
+<h4>Compras del Mes Actual</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Descripción</th>
+            <th>Monto</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var compra in Model.Item2)
+        {
             <tr>
-                <th>Fecha de Compra</th>
-                <th>Descripción</th>
-                <th>Monto</th>
+                <td>@compra.Fecha</td>
+                <td>@compra.Descripcion</td>
+                <td>@compra.Monto</td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var compra in Model)
-            {
-                <tr>
-                    <td>@compra.Fecha</td>
-                    <td>@compra.Descripcion</td>
-                    <td>@compra.Monto</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No hay compras asociadas a esta tarjeta.</p>
-}
+        }
+    </tbody>
+</table>
 
-<a asp-action="Index">Volver a Tarjetas</a>
+
+
 
 
 

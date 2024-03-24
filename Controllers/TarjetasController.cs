@@ -71,7 +71,7 @@
         // POST: Tarjetas/AgregarCompra/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AgregarCompra(int id, [Bind("FechaCompra,Descripcion,Monto")] Compras compra)
+        public async Task<IActionResult> AgregarCompra(int id, [Bind("Fecha,Descripcion,Monto")] Compras compra)
         {
                 compra.TarjetaId = id;
                 _context.Add(compra);
@@ -83,9 +83,36 @@
         // GET: Tarjetas/VerCompras/5
         public async Task<IActionResult> ListaCompras(int? id)
         {
-            var compras = await _context.Compras.Where(c => c.TarjetaId == id).ToListAsync();
-            return View(compras);
+            // Obtener el primer día del mes actual
+            var primerDiaMesActual = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+
+            // Obtener el primer día del mes anterior
+            var primerDiaMesAnterior = primerDiaMesActual.AddMonths(-1);
+
+            // Obtener las compras realizadas en el mes actual para la tarjeta especificada
+            var comprasMesActual = await _context.Compras
+                .Where(c => c.TarjetaId == id && c.Fecha >= primerDiaMesActual)
+                .ToListAsync();
+
+            // Obtener las compras realizadas en el mes anterior para la tarjeta especificada
+            var comprasMesAnterior = await _context.Compras
+                .Where(c => c.TarjetaId == id && c.Fecha >= primerDiaMesAnterior && c.Fecha < primerDiaMesActual)
+                .ToListAsync();
+
+            // Calcular el total de las compras del mes anterior
+            decimal totalComprasMesAnterior = comprasMesAnterior.Sum(c => c.Monto);
+
+            // Obtener los datos de la tarjeta
+            var tarjeta = await _context.Tarjetas.FirstOrDefaultAsync(t => t.Id == id);
+
+            // Crear la tupla con la tarjeta, las compras del mes actual y el total de compras del mes anterior
+            var model = new Tuple<Tarjetas, IEnumerable<Compras>, decimal>(tarjeta, comprasMesActual, totalComprasMesAnterior);
+
+            return View(model);
         }
+
+
+
 
 
 
