@@ -1,0 +1,35 @@
+﻿@model Tuple<IEnumerable<WebAppBanco.Models.Compras>, IEnumerable<WebAppBanco.Models.Pagos>>
+
+<h1>Transacciones</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Descripción</th>
+            <th>Pago</th>
+            <th>Compra</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var compra in Model.Item1)
+        {
+            <tr>
+                <td>@compra.Fecha</td>
+                <td>@compra.Descripcion</td>
+                <td></td> <!-- Dejar vacío para compras -->
+                <td>@compra.Monto</td>
+            </tr>
+        }
+        @foreach (var pago in Model.Item2)
+        {
+            <tr>
+                <td>@pago.Fecha</td>
+                <td>@pago.Descripcion</td>
+                <td>@pago.Monto</td>
+                <td></td> <!-- Dejar vacío para pagos -->
+            </tr>
+        }
+    </tbody>
+</table>
+

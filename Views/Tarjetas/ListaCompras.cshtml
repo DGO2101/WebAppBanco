@@ -32,7 +32,6 @@
         </dl>
     </div>
     <div class="col-sm-6">
-        <h4>Datos Adicionales</h4>
         <hr />
         <dl class="row">
             <dt class="col-sm-10">Monto Total de Compras</dt>
@@ -69,6 +68,9 @@
         }
     </tbody>
 </table>
+@Html.ActionLink("Exportar a Excel", "ExportarExcel", "Tarjetas", null, new { @class = "btn btn-primary" })
+
+
 
 
 
